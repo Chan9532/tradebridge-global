@@ -15,5 +15,6 @@ for (const [filepath, head, worktree] of matrix) {
   else if (head !== worktree) await git.add({ fs, dir, filepath });
 }
 const sha = await git.commit({ fs, dir, message: "Build TradeBridge Global platform", author: { name: "Codex", email: "codex@openai.com" } });
-await git.push({ fs, http, dir, url, ref: "main", remoteRef: "main", force: true, httpHeaders: { Authorization: `Bearer ${token}` } });
+const authorization = `Basic ${Buffer.from(`x-access-token:${token}`).toString("base64")}`;
+await git.push({ fs, http, dir, url, ref: "main", remoteRef: "main", force: true, httpHeaders: { Authorization: authorization } });
 process.stdout.write(sha);
