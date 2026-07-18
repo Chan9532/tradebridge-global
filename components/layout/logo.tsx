@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { ArrowRightLeft } from "lucide-react";
+export function Logo({ light = false }: { light?: boolean }) { return <Link href="/" aria-label="TradeBridge Global home" className="inline-flex items-center gap-2.5"><span className="grid size-10 place-items-center rounded-lg bg-blue-700 text-white"><ArrowRightLeft size={21} strokeWidth={2.4} /></span><span><span className={`block font-display text-[17px] font-extrabold leading-none ${light ? "text-white" : "text-[#071a33]"}`}>TradeBridge</span><span className={`mt-1 block text-[10px] font-bold uppercase tracking-[.22em] ${light ? "text-blue-200" : "text-blue-700"}`}>Global</span></span></Link>; }
