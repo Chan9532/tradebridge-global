@@ -10,7 +10,7 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global-jp-in.chandey.chatgpt.site"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"),
   title: { default: "TradeBridge Global | International Sourcing & Trade Matching", template: "%s | TradeBridge Global" },
   description: "Select products across major industries and send one combined sourcing request to TradeBridge Global.",
   openGraph: { title: "TradeBridge Global", description: "Select products. Send one combined sourcing request.", type: "website", siteName: "TradeBridge Global", images: [{ url: "/og.png", width: 1733, height: 907, alt: "TradeBridge Global product sourcing and combined requests" }] },
