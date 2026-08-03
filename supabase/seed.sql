@@ -8,6 +8,6 @@ insert into public.categories(name,slug,description,image_url) values
 ('Agricultural Equipment','agricultural-equipment','Farm and processing machinery','/forklift-warehouse.jpg'),
 ('Electrical & Engineering','electrical-engineering','Pumps, motors and engineering products','/port-logistics.jpg') on conflict(slug) do nothing;
 insert into public.articles(title,slug,category,excerpt,content,featured_image,published) values
-('Japan’s used machinery export market: what buyers should verify','japan-used-machinery-export-guide','Japan Export','A practical checklist for export buyers.','Use a structured inspection and commercial comparison process.','/forklift-warehouse.jpg',true),
+('Used machinery export market: what buyers should verify','used-machinery-export-guide','Machinery Export','A practical checklist for export buyers.','Use a structured inspection and commercial comparison process.','/forklift-warehouse.jpg',true),
 ('India to Africa: six sourcing categories gaining momentum','india-africa-trade-opportunities','Africa Trade','Where manufacturing strengths align with demand.','Engineering, packaging and agricultural supply remain active categories.','/port-logistics.jpg',true),
 ('Polymer and flexible packaging trends for global buyers','polymer-packaging-market-trends','Market Trends','How recycled content and freight influence quotes.','Compare resin grade, test data, packaging and shipment terms.','/port-logistics.jpg',true) on conflict(slug) do nothing;
