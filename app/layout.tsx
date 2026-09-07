@@ -11,13 +11,13 @@ const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"),
-  title: { default: "TradeBridge Global | International Sourcing & Trade Matching", template: "%s | TradeBridge Global" },
-  description: "Select products across major industries and send one combined sourcing request to TradeBridge Global.",
-  openGraph: { title: "TradeBridge Global", description: "Select products. Send one combined sourcing request.", type: "website", siteName: "TradeBridge Global", images: [{ url: "/og.png", width: 1733, height: 907, alt: "TradeBridge Global product sourcing and combined requests" }] },
-  twitter: { card: "summary_large_image", title: "TradeBridge Global", description: "Select products. Send one combined sourcing request.", images: ["/og.png"] },
+  title: { default: "TradeBridge Digital | Websites, Systems & Automation", template: "%s | TradeBridge Digital" },
+  description: "TradeBridge Digital builds modern websites, business systems, automations and AI-powered solutions for growing businesses.",
+  openGraph: { title: "TradeBridge Digital", description: "Websites, business systems, automation and AI for growing businesses.", type: "website", siteName: "TradeBridge Digital", images: [{ url: "/og.png", width: 1733, height: 907, alt: "TradeBridge Digital" }] },
+  twitter: { card: "summary_large_image", title: "TradeBridge Digital", description: "Websites, business systems, automation and AI for growing businesses.", images: ["/og.png"] },
   icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${inter.variable} ${manrope.variable}`}><InterestProvider><Header /><main>{children}</main><Footer /></InterestProvider><Toaster richColors position="top-right" /></body></html>;
+  return <html lang="en"><body className={`${inter.variable} ${manrope.variable}`}><InterestProvider><Header /><main id="main-content">{children}</main><Footer /></InterestProvider><Toaster richColors position="top-right" /></body></html>;
 }
