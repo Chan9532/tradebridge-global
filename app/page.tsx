@@ -1,36 +1,154 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CheckCircle2, ClipboardCheck, ClipboardList, Earth, Handshake, ListChecks, MessageSquareText, PackageSearch, Scale, SearchCheck, Send, Ship } from "lucide-react";
-import { opportunities } from "@/lib/site-data";
-import { productCatalog } from "@/lib/product-catalog";
-import { insightArticles } from "@/lib/insights-data";
+import {
+  ArrowRight,
+  Bot,
+  Braces,
+  Check,
+  ChevronRight,
+  DatabaseZap,
+  Globe2,
+  LayoutDashboard,
+  MonitorSmartphone,
+  MoveUpRight,
+  Palette,
+  Sparkles,
+  Workflow,
+} from "lucide-react";
+import { BrowserVisual } from "@/components/home/browser-visual";
+import { TemplatePreview } from "@/components/home/template-preview";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { Badge } from "@/components/ui/badge";
+import { buttonStyles } from "@/components/ui/button";
+import { coreServices, featuredTemplates, featuredWork, pricing, processSteps, type ServiceId } from "@/lib/digital-home-data";
 
-export const metadata: Metadata = { title: "Global Sourcing Made Simple", description: "Connect with reliable suppliers from India and major sourcing markets through a transparent commission-based service." };
+export const metadata: Metadata = {
+  title: "Websites & Business Systems That Help You Grow",
+  description: "Modern websites, CRM systems, automations and AI-powered business solutions for startups and growing businesses.",
+};
 
-const trust = [[BadgeCheck, "Verified supplier network"], [Earth, "Multi-country sourcing"], [PackageSearch, "Buyer requirement matching"], [Scale, "Commission-based service"], [Handshake, "End-to-end deal coordination"]] as const;
-const why = ["Mumbai-based sourcing coordination", "India supplier network", "International trade experience", "Product and supplier verification", "Fast quotation comparison", "Confidential buyer and supplier information", "Transparent commission-based service"];
+const quoteHref = "mailto:info@tradebridge-global.com?subject=TradeBridge%20Digital%20Project%20Quote";
+const serviceIcons = { websites: MonitorSmartphone, systems: LayoutDashboard, automation: Workflow, ai: Bot } satisfies Record<ServiceId, typeof Globe2>;
+const workIcons = [Palette, DatabaseZap, Braces] as const;
+
+function formatPrice(value: number) {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: pricing.currency, maximumFractionDigits: 0 }).format(value);
+}
 
 export default function Home() {
-  const schema = { "@context": "https://schema.org", "@type": "Organization", name: "TradeBridge Global", url: process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com", description: "International sourcing and trade-matching company.", areaServed: ["Africa", "Asia", "Middle East"], knowsAbout: ["Industrial machinery", "International sourcing", "Trade matching"] };
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "TradeBridge Digital",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com",
+    email: "info@tradebridge-global.com",
+    description: "Websites, business systems, automation and AI-powered solutions for growing businesses.",
+    areaServed: "Worldwide",
+    serviceType: ["Website development", "Business systems", "Workflow automation", "AI integration"],
+  };
+
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-    <section className="relative min-h-[690px] overflow-hidden bg-[#071a33] text-white"><Image src="/port-logistics.jpg" alt="International shipping containers at a global logistics port" fill priority className="object-cover object-center" /><div className="absolute inset-0 hero-overlay" /><div className="absolute inset-0 grid-lines opacity-50"/><div className="container-site relative flex min-h-[690px] items-center py-20"><div className="max-w-3xl"><div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[.14em] text-blue-100 backdrop-blur"><Earth size={15}/> India · Global markets</div><h1 className="display-title mt-7">Global Sourcing<br/><span className="text-blue-300">Made Simple</span></h1><p className="mt-7 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">We connect international buyers with reliable suppliers from India and other major sourcing markets.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><Link href="/request" className="inline-flex h-13 items-center justify-center gap-2 rounded-lg bg-amber-400 px-6 text-sm font-extrabold text-slate-950 transition hover:bg-amber-300">Submit Your Requirement <ArrowRight size={17}/></Link><Link href="/products" className="inline-flex h-13 items-center justify-center rounded-lg border border-white/35 bg-white/10 px-6 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Explore Products</Link></div><div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-300"><span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-amber-400"/>No inventory bias</span><span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-amber-400"/>Confidential matching</span><span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-amber-400"/>Transparent process</span></div></div></div></section>
 
-    <section className="relative z-10 -mt-8"><div className="container-site grid overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft sm:grid-cols-2 lg:grid-cols-5">{trust.map(([Icon,label],i) => <div key={label} className={`flex min-h-28 items-center gap-3 px-5 py-6 ${i ? "border-t border-slate-100 sm:border-l sm:border-t-0" : ""}`}><span className="grid size-10 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Icon size={20}/></span><span className="text-sm font-bold leading-5 text-slate-800">{label}</span></div>)}</div></section>
+    <section className="relative isolate overflow-hidden bg-[#07152b] text-white">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_20%,rgba(22,93,255,.25),transparent_32%),radial-gradient(circle_at_84%_62%,rgba(64,148,255,.16),transparent_35%)]" />
+      <div className="absolute inset-0 -z-10 grid-lines opacity-40" />
+      <div className="container-site grid min-h-[calc(100svh-4.5rem)] items-center gap-14 py-20 lg:grid-cols-[.9fr_1.1fr] lg:py-24 xl:gap-20">
+        <div className="max-w-2xl">
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-blue-300/8 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[.16em] text-blue-200"><Sparkles size={14} /> Websites • Systems • Automation • AI</span>
+          <h1 className="mt-7 font-display text-[clamp(2.75rem,6vw,5.4rem)] font-extrabold leading-[.98] tracking-[-.06em] text-white">Websites &amp; Business Systems <span className="text-blue-300">That Help You Grow</span></h1>
+          <p className="mt-7 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">We build modern websites, CRM systems, automations and AI-powered business solutions for startups and growing businesses.</p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link href="#templates" className={buttonStyles({ size: "lg", className: "bg-blue-500 hover:bg-blue-400" })}>View Templates <ArrowRight size={17} /></Link>
+            <a href={quoteHref} className={buttonStyles({ variant: "outline", size: "lg", className: "border-white/25 bg-white/8 text-white hover:border-white/45 hover:bg-white/12 hover:text-white" })}>Start a Project <MoveUpRight size={17} /></a>
+          </div>
+          <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-400">
+            {["Clear project scope", "Responsive by default", "Built for practical use"].map(item => <span key={item} className="flex items-center gap-2"><Check size={14} className="text-blue-300" />{item}</span>)}
+          </div>
+        </div>
+        <BrowserVisual />
+      </div>
+    </section>
 
-    <section className="section-pad"><div className="container-site"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><SectionHeading eyebrow="What we source" title="Products for industry, infrastructure and trade" description="Browse our sourcing capabilities, select products across multiple categories and send one coordinated requirement."/><Link href="/products" className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-700">Explore all products <ArrowRight size={17}/></Link></div><div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{productCatalog.slice(0,8).map(c => <article key={c.slug} className="group relative min-h-80 overflow-hidden rounded-xl bg-[#071a33]"><Image src={c.image} alt={`${c.name} sourcing category`} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover object-center transition duration-500 group-hover:scale-105" /><div className="absolute inset-0 image-shade"/><div className="absolute inset-x-0 bottom-0 p-6 text-white"><h3 className="font-display text-xl font-extrabold">{c.name}</h3><p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-300">{c.description}</p><Link href={`/products#${c.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-amber-400">Explore category <ArrowRight size={15}/></Link></div></article>)}</div></div></section>
+    <section id="services" className="section-pad scroll-mt-20 bg-white">
+      <div className="container-site">
+        <SectionHeading eyebrow="Core services" title="Digital tools built around real business needs" description="From your public website to the systems behind it, every part is designed to work together." />
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {coreServices.map(service => {
+            const Icon = serviceIcons[service.id];
+            return <article key={service.id} className="group site-card flex min-h-80 flex-col p-6 transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(10,26,47,.1)]">
+              <span className="grid size-12 place-items-center rounded-xl bg-blue-50 text-blue-700 transition group-hover:bg-blue-700 group-hover:text-white"><Icon size={22} /></span>
+              <h3 className="mt-6 text-xl font-extrabold text-[#0a1a2f]">{service.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{service.summary}</p>
+              <ul className="mt-6 space-y-2.5 border-t border-slate-100 pt-5">{service.items.map(item => <li key={item} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700"><Check size={14} className="text-blue-600" />{item}</li>)}</ul>
+            </article>;
+          })}
+        </div>
+      </div>
+    </section>
 
-    <section className="section-pad bg-slate-50"><div className="container-site"><SectionHeading eyebrow="A clear process" title="How TradeBridge works" description="One coordinated workflow from initial requirement to a deal both sides can execute with confidence." align="center"/><div className="relative mt-14 grid gap-5 md:grid-cols-4"><div className="absolute left-[12%] right-[12%] top-8 hidden h-px bg-blue-200 md:block"/>{[[ClipboardCheck,"Submit a requirement","Tell us the product, quantity, destination and commercial priorities."],[SearchCheck,"We identify suppliers","Our team searches the most suitable verified sourcing channels."],[MessageSquareText,"Compare matching offers","Receive structured options with specifications and commercial terms."],[Ship,"Coordinate deal & shipment","We support communication, documents and shipment handover."]].map(([Icon,title,text],i) => <div key={title as string} className="relative rounded-xl border border-slate-200 bg-white p-6"><div className="relative z-10 grid size-16 place-items-center rounded-full border-4 border-slate-50 bg-blue-700 text-white"><Icon size={25}/></div><span className="mt-6 block text-xs font-extrabold uppercase tracking-[.18em] text-blue-600">Step 0{i+1}</span><h3 className="mt-2 text-lg font-extrabold text-[#071a33]">{title as string}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{text as string}</p></div>)}</div></div></section>
+    <section id="templates" className="section-pad scroll-mt-20 border-y border-slate-200 bg-[#f5f7fb]">
+      <div className="container-site">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <SectionHeading eyebrow="Featured templates" title="A strong starting point for your next website" description="Six demo concepts showing the direction of the future template library. Every build can be adapted to your brand and goals." />
+          <Link href="#template-grid" className={buttonStyles({ variant: "outline", className: "shrink-0" })}>Browse All Templates <ArrowRight size={16} /></Link>
+        </div>
+        <div id="template-grid" className="mt-12 grid scroll-mt-28 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featuredTemplates.map((template, index) => <article key={template.name} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_16px_40px_rgba(10,26,47,.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_54px_rgba(10,26,47,.1)]">
+            <TemplatePreview accent={template.accent} index={index} />
+            <div className="px-3 pb-3 pt-5"><div className="flex items-center justify-between gap-3"><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-blue-700">Demo template</span><span className="text-xs font-semibold text-slate-400">{template.category}</span></div><h3 className="mt-3 text-xl font-extrabold text-[#0a1a2f]">{template.name}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{template.description}</p></div>
+          </article>)}
+        </div>
+      </div>
+    </section>
 
-    <section className="section-pad"><div className="container-site"><SectionHeading eyebrow="Live deal flow" title="Featured sourcing opportunities" description="Representative products currently being sourced or offered through our network."/><div className="mt-10 overflow-x-auto rounded-xl border border-slate-200"><table className="w-full min-w-[850px] text-left text-sm"><thead className="bg-[#071a33] text-xs uppercase tracking-wider text-slate-300"><tr>{["Product","Origin","Destination","Minimum quantity","Status",""] .map(x=><th key={x} className="px-5 py-4 font-bold">{x}</th>)}</tr></thead><tbody className="divide-y divide-slate-100">{opportunities.map(([product,origin,destination,qty,status]) => <tr key={product} className="transition hover:bg-slate-50"><td className="px-5 py-5 font-bold text-[#071a33]">{product}</td><td className="px-5 py-5">{origin}</td><td className="px-5 py-5">{destination}</td><td className="px-5 py-5">{qty}</td><td className="px-5 py-5"><Badge className={status === "Limited" ? "bg-amber-50 text-amber-700" : ""}>{status}</Badge></td><td className="px-5 py-5"><Link href="/contact?type=opportunity" className="font-bold text-blue-700">Request Details</Link></td></tr>)}</tbody></table></div></div></section>
+    <section id="work" className="section-pad scroll-mt-20 bg-white">
+      <div className="container-site">
+        <SectionHeading eyebrow="Featured work" title="Ideas, systems and builds in progress" description="Until client case studies are ready to publish, this section shows only clearly labeled internal work and demo concepts." />
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {featuredWork.map((project, index) => {
+            const Icon = workIcons[index];
+            return <article key={project.title} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="relative flex h-56 items-end overflow-hidden bg-[#0a1a2f] p-6 text-white"><div className="absolute -right-14 -top-14 size-48 rounded-full border-[32px] border-blue-500/20"/><div className="absolute bottom-10 right-10 size-24 rotate-12 rounded-2xl border border-white/10 bg-white/5"/><span className="relative grid size-14 place-items-center rounded-2xl border border-white/15 bg-white/10 text-blue-200"><Icon size={25}/></span><span className="absolute right-5 top-5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-blue-100">{project.status}</span></div>
+              <div className="p-6"><span className="text-xs font-bold text-blue-700">{project.type}</span><h3 className="mt-2 text-xl font-extrabold text-[#0a1a2f]">{project.title}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{project.description}</p></div>
+            </article>;
+          })}
+        </div>
+      </div>
+    </section>
 
-    <section className="section-pad overflow-hidden bg-[#071a33] text-white"><div className="container-site grid items-center gap-14 lg:grid-cols-[.9fr_1.1fr]"><div className="relative min-h-[460px] overflow-hidden rounded-2xl"><Image src="/forklift-warehouse.jpg" alt="Warehouse equipment sourcing" fill className="object-cover"/><div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/15 bg-[#071a33]/90 p-5 backdrop-blur"><div className="flex items-center gap-3"><div className="grid size-11 place-items-center rounded-lg bg-amber-400 text-[#071a33]"><Handshake/></div><div><strong className="block font-display text-lg">Aligned with your deal</strong><span className="text-sm text-slate-300">We earn when a transaction is completed.</span></div></div></div></div><div><span className="eyebrow !text-blue-300">Why choose us</span><h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl">Trade connections built on evidence, not guesswork.</h2><p className="mt-5 text-base leading-7 text-slate-300">We stay independent of inventory, so the sourcing process begins with your actual requirement—not a warehouse we need to clear.</p><div className="mt-8 grid gap-x-7 gap-y-4 sm:grid-cols-2">{why.map(x => <div key={x} className="flex items-start gap-3 text-sm font-semibold"><CheckCircle2 className="mt-0.5 shrink-0 text-amber-400" size={18}/>{x}</div>)}</div><Link href="/about" className="mt-9 inline-flex h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-[#071a33]">Learn about our approach <ArrowRight size={16}/></Link></div></div></section>
+    <section id="pricing" className="section-pad scroll-mt-20 bg-[#0a1a2f] text-white">
+      <div className="container-site">
+        <div className="mx-auto max-w-3xl text-center"><span className="eyebrow !text-blue-300">Pricing preview</span><h2 className="mt-4 font-display text-[clamp(2rem,3.5vw,3.4rem)] font-extrabold leading-[1.08] tracking-[-.045em]">A clear starting point for planning</h2><p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">Every project is scoped individually. These starting prices help you choose the right level.</p></div>
+        <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          {pricing.tiers.map((tier, index) => <article key={tier.name} className={`flex min-h-[390px] flex-col rounded-2xl border p-7 ${index === 1 ? "border-blue-400 bg-blue-600 shadow-[0_24px_70px_rgba(22,93,255,.25)]" : "border-white/12 bg-white/5"}`}>
+            <span className={`text-xs font-extrabold uppercase tracking-[.16em] ${index === 1 ? "text-blue-100" : "text-blue-300"}`}>{tier.name}</span>
+            <div className="mt-6"><span className={`block text-xs font-semibold ${index === 1 ? "text-blue-100" : "text-slate-400"}`}>Starting at</span><strong className="mt-1 block font-display text-4xl font-extrabold tracking-tight">{formatPrice(tier.price)}</strong></div>
+            <p className={`mt-4 text-sm leading-6 ${index === 1 ? "text-blue-50" : "text-slate-300"}`}>{tier.description}</p>
+            <ul className={`mt-7 space-y-3 border-t pt-6 ${index === 1 ? "border-white/20" : "border-white/10"}`}>{tier.features.map(feature => <li key={feature} className="flex items-center gap-3 text-sm font-semibold"><span className={`grid size-5 shrink-0 place-items-center rounded-full ${index === 1 ? "bg-white/15" : "bg-blue-400/15"}`}><Check size={12} /></span>{feature}</li>)}</ul>
+            <a href={`${quoteHref}&body=I%27m%20interested%20in%20the%20${encodeURIComponent(tier.name)}%20package.`} className={`mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${index === 1 ? "bg-white text-blue-700 hover:bg-blue-50" : "border border-white/20 bg-white/5 text-white hover:bg-white/10"}`}>Discuss this option <ChevronRight size={15}/></a>
+          </article>)}
+        </div>
+        <p className="mt-6 text-center text-xs leading-5 text-slate-400">Final pricing depends on scope, content, integrations and timeline.</p>
+      </div>
+    </section>
 
-    <section className="section-pad"><div className="container-site"><div className="rounded-2xl bg-blue-700 p-8 text-white md:p-12"><div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center"><div><ClipboardList size={36} className="text-blue-200"/><h2 className="mt-5 text-3xl font-extrabold md:text-4xl">Tell Us What You Need</h2><p className="mt-4 max-w-xl leading-7 text-blue-100">Select products from our categories and send one combined sourcing, discussion, or buying request.</p><div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link href="/products" className="inline-flex h-12 items-center justify-center rounded-lg bg-amber-400 px-6 text-sm font-extrabold text-[#071a33]">Explore Products</Link><Link href="/request" className="inline-flex h-12 items-center justify-center rounded-lg border border-white/30 px-6 text-sm font-bold text-white">Submit a Requirement</Link></div></div><div className="grid gap-3 sm:grid-cols-2">{[[ListChecks,"Select products","Browse professional category sections."],[ClipboardList,"Build your Interest List","Combine products from different industries."],[PackageSearch,"Add commercial details","Enter quantities, condition and specifications."],[Send,"Send one request","Our team contacts you to discuss the opportunity."]].map(([Icon,title,text])=><div key={title as string} className="rounded-xl border border-white/15 bg-white/10 p-5"><Icon size={21} className="text-amber-300"/><strong className="mt-3 block text-sm">{title as string}</strong><span className="mt-1 block text-xs leading-5 text-blue-100">{text as string}</span></div>)}</div></div></div></div></section>
+    <section id="process" className="section-pad scroll-mt-20 bg-white">
+      <div className="container-site">
+        <SectionHeading eyebrow="How it works" title="From idea to launch, without the confusion" description="A straightforward process keeps decisions clear and momentum steady." align="center" />
+        <ol className="relative mt-14 grid gap-5 md:grid-cols-4">
+          <div aria-hidden="true" className="absolute left-[12%] right-[12%] top-7 hidden h-px bg-blue-200 md:block" />
+          {processSteps.map((step, index) => <li key={step.title} className="relative rounded-2xl border border-slate-200 bg-white p-6 text-center md:border-0 md:p-4"><span className="relative z-10 mx-auto grid size-14 place-items-center rounded-full border-4 border-white bg-blue-700 font-display text-sm font-extrabold text-white shadow-[0_0_0_1px_#dbeafe]">0{index + 1}</span><h3 className="mt-5 text-lg font-extrabold text-[#0a1a2f]">{step.title}</h3><p className="mx-auto mt-2 max-w-[15rem] text-sm leading-6 text-slate-600">{step.description}</p></li>)}
+        </ol>
+      </div>
+    </section>
 
-    <section className="section-pad border-t border-slate-100 bg-slate-50"><div className="container-site"><div className="flex items-end justify-between gap-6"><SectionHeading eyebrow="Market intelligence" title="Insights for better sourcing decisions"/><Link href="/market-insights" className="hidden items-center gap-2 text-sm font-bold text-blue-700 md:inline-flex">All insights <ArrowRight size={16}/></Link></div><div className="mt-10 grid gap-6 md:grid-cols-3">{insightArticles.slice(0,3).map(a => <article key={a.slug} className="overflow-hidden rounded-xl border border-slate-200 bg-white"><div className="relative h-52"><Image src={a.image} alt="" fill className="object-cover"/></div><div className="p-6"><Badge>{a.category}</Badge><h3 className="mt-4 text-xl font-extrabold leading-snug text-[#071a33]"><Link href={`/market-insights/${a.slug}`}>{a.title}</Link></h3><p className="mt-3 text-sm leading-6 text-slate-600">{a.summary}</p><Link href={`/market-insights/${a.slug}`} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-700">Read More <ArrowRight size={15}/></Link></div></article>)}</div></div></section>
+    <section className="pb-16 sm:pb-20 lg:pb-28">
+      <div className="container-site">
+        <div className="relative overflow-hidden rounded-[2rem] bg-blue-700 px-6 py-14 text-center text-white sm:px-10 sm:py-16 lg:px-16">
+          <div aria-hidden="true" className="absolute -left-20 -top-20 size-64 rounded-full border-[42px] border-white/8"/><div aria-hidden="true" className="absolute -bottom-28 -right-20 size-72 rounded-full border-[48px] border-[#0a1a2f]/15"/>
+          <div className="relative mx-auto max-w-3xl"><span className="text-xs font-extrabold uppercase tracking-[.18em] text-blue-100">Your next useful system starts here</span><h2 className="mt-5 font-display text-3xl font-extrabold leading-tight tracking-[-.045em] sm:text-4xl lg:text-5xl">Ready to Build Something Useful?</h2><p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-blue-100 sm:text-base">Tell us what you want to launch, improve or automate. We’ll help you shape the right next step.</p><a href={quoteHref} className={buttonStyles({ variant: "secondary", size: "lg", className: "mt-8" })}>Get a Free Quote <ArrowRight size={17}/></a></div>
+        </div>
+      </div>
+    </section>
   </>;
 }
