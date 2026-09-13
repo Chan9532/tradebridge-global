@@ -1,4 +1,4 @@
-# TradeBridge Global
+# TradeBridge Digital
 
 A production-oriented international sourcing and commission-based trade-matching platform. The public experience is built around an industry catalog, a persistent multi-product Interest List, a combined sourcing request, approved buyer requests, and practical market intelligence. Supplier records and direct contact details remain private and are managed internally.
 
@@ -43,6 +43,13 @@ Never expose `SUPABASE_SERVICE_ROLE_KEY` to browser code. Configure Storage buck
 - Deploy to Vercel by importing the repository and adding the environment variables from `.env.example`. `vercel.json` selects the standard Next.js build.
 
 Before production launch, replace placeholder contact details and office location, set `NEXT_PUBLIC_SITE_URL` to the final HTTPS domain, connect the WhatsApp and LinkedIn destinations, and confirm email templates in Supabase Auth.
+
+## Template catalog
+
+The catalog reads published and coming-soon records from Supabase when the existing project variables are configured. Drafts remain private through RLS and the server uses an explicit public field allowlist. The existing static records remain only as an unconfigured compatibility preview.
+
+See [`docs/adding-a-template.md`](docs/adding-a-template.md) for the exact process and copy-ready record needed to add Template #11 safely.
+See [`docs/supabase-templates.md`](docs/supabase-templates.md) for the catalog data flow, publication states and activation steps.
 
 ## Security model
 

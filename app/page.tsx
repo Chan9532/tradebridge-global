@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -16,10 +17,11 @@ import {
   Workflow,
 } from "lucide-react";
 import { BrowserVisual } from "@/components/home/browser-visual";
-import { TemplatePreview } from "@/components/home/template-preview";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { buttonStyles } from "@/components/ui/button";
-import { coreServices, featuredTemplates, featuredWork, pricing, processSteps, type ServiceId } from "@/lib/digital-home-data";
+import { coreServices, featuredWork, processSteps, type ServiceId } from "@/lib/digital-home-data";
+import { formatPrice, pricingConfig as pricing } from "@/lib/pricing-data";
+import { listFeaturedTemplates } from "@/lib/templates/repository";
 
 export const metadata: Metadata = {
   title: "Websites & Business Systems That Help You Grow",
@@ -30,11 +32,8 @@ const quoteHref = "mailto:info@tradebridge-global.com?subject=TradeBridge%20Digi
 const serviceIcons = { websites: MonitorSmartphone, systems: LayoutDashboard, automation: Workflow, ai: Bot } satisfies Record<ServiceId, typeof Globe2>;
 const workIcons = [Palette, DatabaseZap, Braces] as const;
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: pricing.currency, maximumFractionDigits: 0 }).format(value);
-}
-
-export default function Home() {
+export default async function Home() {
+  const featuredTemplates = await listFeaturedTemplates(6);
   const schema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -58,7 +57,7 @@ export default function Home() {
           <h1 className="mt-7 font-display text-[clamp(2.75rem,6vw,5.4rem)] font-extrabold leading-[.98] tracking-[-.06em] text-white">Websites &amp; Business Systems <span className="text-blue-300">That Help You Grow</span></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">We build modern websites, CRM systems, automations and AI-powered business solutions for startups and growing businesses.</p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="#templates" className={buttonStyles({ size: "lg", className: "bg-blue-500 hover:bg-blue-400" })}>View Templates <ArrowRight size={17} /></Link>
+            <Link href="/templates" className={buttonStyles({ size: "lg", className: "bg-blue-500 hover:bg-blue-400" })}>View Templates <ArrowRight size={17} /></Link>
             <a href={quoteHref} className={buttonStyles({ variant: "outline", size: "lg", className: "border-white/25 bg-white/8 text-white hover:border-white/45 hover:bg-white/12 hover:text-white" })}>Start a Project <MoveUpRight size={17} /></a>
           </div>
           <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-400">
@@ -90,12 +89,12 @@ export default function Home() {
       <div className="container-site">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHeading eyebrow="Featured templates" title="A strong starting point for your next website" description="Six demo concepts showing the direction of the future template library. Every build can be adapted to your brand and goals." />
-          <Link href="#template-grid" className={buttonStyles({ variant: "outline", className: "shrink-0" })}>Browse All Templates <ArrowRight size={16} /></Link>
+          <Link href="/templates" className={buttonStyles({ variant: "outline", className: "shrink-0" })}>Browse All Templates <ArrowRight size={16} /></Link>
         </div>
         <div id="template-grid" className="mt-12 grid scroll-mt-28 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredTemplates.map((template, index) => <article key={template.name} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_16px_40px_rgba(10,26,47,.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_54px_rgba(10,26,47,.1)]">
-            <TemplatePreview accent={template.accent} index={index} />
-            <div className="px-3 pb-3 pt-5"><div className="flex items-center justify-between gap-3"><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-blue-700">Demo template</span><span className="text-xs font-semibold text-slate-400">{template.category}</span></div><h3 className="mt-3 text-xl font-extrabold text-[#0a1a2f]">{template.name}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{template.description}</p></div>
+          {featuredTemplates.map(template => <article key={template.id} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_16px_40px_rgba(10,26,47,.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_54px_rgba(10,26,47,.1)]">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-slate-200 bg-slate-100"><Image src={template.thumbnail} alt={`${template.name} website template preview`} fill unoptimized sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" /></div>
+            <div className="px-3 pb-3 pt-5"><div className="flex items-center justify-between gap-3"><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-emerald-700">Available · Internal demo</span><span className="text-xs font-semibold text-slate-400">{template.industry}</span></div><h3 className="mt-3 text-xl font-extrabold text-[#0a1a2f]">{template.name}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{template.short_description}</p><Link href={`/templates/${template.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm font-extrabold text-blue-700 transition hover:text-blue-600">View template <ArrowRight size={14} /></Link></div>
           </article>)}
         </div>
       </div>
@@ -120,15 +119,15 @@ export default function Home() {
       <div className="container-site">
         <div className="mx-auto max-w-3xl text-center"><span className="eyebrow !text-blue-300">Pricing preview</span><h2 className="mt-4 font-display text-[clamp(2rem,3.5vw,3.4rem)] font-extrabold leading-[1.08] tracking-[-.045em]">A clear starting point for planning</h2><p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">Every project is scoped individually. These starting prices help you choose the right level.</p></div>
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
-          {pricing.tiers.map((tier, index) => <article key={tier.name} className={`flex min-h-[390px] flex-col rounded-2xl border p-7 ${index === 1 ? "border-blue-400 bg-blue-600 shadow-[0_24px_70px_rgba(22,93,255,.25)]" : "border-white/12 bg-white/5"}`}>
+          {pricing.packages.map((tier, index) => <article key={tier.id} className={`flex min-h-[390px] flex-col rounded-2xl border p-7 ${index === 1 ? "border-blue-400 bg-blue-600 shadow-[0_24px_70px_rgba(22,93,255,.25)]" : "border-white/12 bg-white/5"}`}>
             <span className={`text-xs font-extrabold uppercase tracking-[.16em] ${index === 1 ? "text-blue-100" : "text-blue-300"}`}>{tier.name}</span>
             <div className="mt-6"><span className={`block text-xs font-semibold ${index === 1 ? "text-blue-100" : "text-slate-400"}`}>Starting at</span><strong className="mt-1 block font-display text-4xl font-extrabold tracking-tight">{formatPrice(tier.price)}</strong></div>
-            <p className={`mt-4 text-sm leading-6 ${index === 1 ? "text-blue-50" : "text-slate-300"}`}>{tier.description}</p>
-            <ul className={`mt-7 space-y-3 border-t pt-6 ${index === 1 ? "border-white/20" : "border-white/10"}`}>{tier.features.map(feature => <li key={feature} className="flex items-center gap-3 text-sm font-semibold"><span className={`grid size-5 shrink-0 place-items-center rounded-full ${index === 1 ? "bg-white/15" : "bg-blue-400/15"}`}><Check size={12} /></span>{feature}</li>)}</ul>
+            <p className={`mt-4 text-sm leading-6 ${index === 1 ? "text-blue-50" : "text-slate-300"}`}>{tier.audience}</p>
+            <ul className={`mt-7 space-y-3 border-t pt-6 ${index === 1 ? "border-white/20" : "border-white/10"}`}>{tier.inclusions.slice(0, 3).map(feature => <li key={feature} className="flex items-center gap-3 text-sm font-semibold"><span className={`grid size-5 shrink-0 place-items-center rounded-full ${index === 1 ? "bg-white/15" : "bg-blue-400/15"}`}><Check size={12} /></span>{feature}</li>)}</ul>
             <a href={`${quoteHref}&body=I%27m%20interested%20in%20the%20${encodeURIComponent(tier.name)}%20package.`} className={`mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${index === 1 ? "bg-white text-blue-700 hover:bg-blue-50" : "border border-white/20 bg-white/5 text-white hover:bg-white/10"}`}>Discuss this option <ChevronRight size={15}/></a>
           </article>)}
         </div>
-        <p className="mt-6 text-center text-xs leading-5 text-slate-400">Final pricing depends on scope, content, integrations and timeline.</p>
+        <p className="mt-6 text-center text-xs leading-5 text-slate-400">{pricing.scopeNotice}</p>
       </div>
     </section>
 

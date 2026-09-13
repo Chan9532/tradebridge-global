@@ -1,7 +1,74 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { CheckCircle2, Earth, Handshake, LockKeyhole, Network, Scale } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Check } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
-import { SectionHeading } from "@/components/shared/section-heading";
-export const metadata:Metadata={title:"About",description:"Learn how TradeBridge Global connects international buyers and trusted suppliers through a transparent, inventory-independent model."};
-export default function AboutPage(){return <><PageHero eyebrow="About TradeBridge" title="Trusted connections for global trade" description="We help international buyers source reliable products from trusted suppliers while helping manufacturers and exporters reach new global markets."/><section className="container-site section-pad grid items-center gap-12 lg:grid-cols-2"><div><SectionHeading eyebrow="Our mission" title="Make cross-border sourcing clearer, safer and more efficient" description="TradeBridge Global exists to reduce the friction between a serious requirement and the right supplier. We bring structure to supplier search, offer comparison, communication and deal coordination."/><div className="mt-7 space-y-3">{["Requirement-led sourcing, without inventory pressure","Supplier access in India and other global markets","Confidential handling of commercial information"].map(x=><p key={x} className="flex gap-3 text-sm font-semibold text-slate-700"><CheckCircle2 size={18} className="text-blue-700"/>{x}</p>)}</div></div><div className="relative min-h-[460px] overflow-hidden rounded-2xl"><Image src="/port-logistics.jpg" alt="Global trade logistics" fill className="object-cover"/></div></section><section className="bg-slate-50 section-pad"><div className="container-site"><SectionHeading eyebrow="Business model" title="We focus on trusted connections—not holding inventory" description="Independence from inventory lets us begin with the buyer’s need and search for the strongest available fit." align="center"/><div className="mt-12 grid gap-5 md:grid-cols-3">{[[Network,"Global sourcing approach","We combine local access, supplier discovery and transaction coordination across markets."],[Scale,"Transparent commission","Our commercial role and fee basis are disclosed before a transaction proceeds."],[Handshake,"Aligned outcomes","We earn commission when an agreed deal is completed, keeping attention on executable matches."]].map(([Icon,t,d])=><div key={t as string} className="rounded-xl border border-slate-200 bg-white p-7 text-center"><span className="mx-auto grid size-12 place-items-center rounded-lg bg-blue-50 text-blue-700"><Icon/></span><h2 className="mt-5 text-xl font-extrabold text-[#071a33]">{t as string}</h2><p className="mt-3 text-sm leading-6 text-slate-600">{d as string}</p></div>)}</div></div></section><section className="container-site section-pad grid gap-8 md:grid-cols-2"><div className="rounded-2xl bg-[#071a33] p-8 text-white"><Earth className="text-amber-400"/><h2 className="mt-5 text-2xl font-extrabold">Global sourcing access</h2><p className="mt-4 leading-7 text-slate-300">Our requirement-led approach connects qualified buyers with suitable suppliers across trusted international markets, with structured comparison and deal coordination.</p></div><div className="rounded-2xl bg-blue-700 p-8 text-white"><Network className="text-amber-400"/><h2 className="mt-5 text-2xl font-extrabold">India sourcing advantage</h2><p className="mt-4 leading-7 text-blue-100">India offers broad manufacturing depth across engineering goods, pumps, packaging, polymers, fabrics, agriculture products and repeat-volume export supply.</p></div><div className="rounded-xl border border-slate-200 p-7 md:col-span-2"><div className="flex items-start gap-4"><LockKeyhole className="mt-1 shrink-0 text-blue-700"/><div><h2 className="text-xl font-extrabold text-[#071a33]">Confidentiality and transparency</h2><p className="mt-3 leading-7 text-slate-600">Buyer identities, supplier contacts, documents, quotes and negotiation details are not displayed publicly. Access is role-based, and introductions are coordinated only for approved sourcing activity. Our commission role is disclosed so each party understands how TradeBridge participates.</p></div></div></div></section></>}
+import { buttonStyles } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "TradeBridge Digital is an independent digital studio founded by Chanchal Dey, helping businesses build practical websites, systems and automations.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About TradeBridge Digital",
+    description: "An independent digital studio focused on practical systems that solve real business problems.",
+    url: "/about",
+  },
+};
+
+const strengths = [
+  "Business understanding",
+  "International business experience",
+  "Website development",
+  "Systems thinking",
+  "Automation",
+  "Practical AI integration",
+];
+
+const tools = ["Next.js", "React", "Supabase", "APIs", "n8n", "AI integration"];
+
+export default function AboutPage() {
+  return (
+    <>
+      <PageHero
+        eyebrow="About TradeBridge Digital"
+        title="An independent digital studio."
+        description="Helping businesses build practical websites, systems and automations. We focus on practical systems that solve real business problems."
+      />
+
+      <section aria-labelledby="founder-heading" className="container-site grid gap-10 py-14 sm:py-20 lg:grid-cols-[.8fr_1.2fr] lg:gap-20">
+        <div>
+          <span className="eyebrow">Founder</span>
+          <h2 id="founder-heading" className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#0a1a2f] sm:text-4xl">Chanchal Dey</h2>
+          <p className="mt-3 text-lg font-semibold text-blue-700">Web Developer &amp; Business Systems Builder</p>
+          <p className="mt-5 max-w-xl text-base leading-8 text-slate-600">Chanchal brings business understanding and international business experience to website development and systems building. His approach connects how a business works with the technology it needs.</p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+          <h3 className="text-xl font-extrabold text-[#0a1a2f]">Business context. Practical technology.</h3>
+          <p className="mt-3 text-base leading-7 text-slate-600">Start with the problem, understand the workflow, then build a solution that is useful and manageable.</p>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+            {strengths.map(strength => (
+              <li key={strength} className="flex items-start gap-3 text-base leading-6 text-slate-700"><Check size={18} aria-hidden="true" className="mt-1 shrink-0 text-blue-700" />{strength}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="tools-heading" className="border-y border-slate-200 bg-white py-9">
+        <div className="container-site flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div><h2 id="tools-heading" className="text-xl font-extrabold text-[#0a1a2f]">Tools chosen for the job</h2><p className="mt-2 text-base text-slate-600">A focused toolkit for websites, connected systems and automation.</p></div>
+          <ul className="flex flex-wrap gap-2">
+            {tools.map(tool => <li key={tool} className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700">{tool}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section className="container-site py-14 sm:py-20">
+        <div className="flex flex-col gap-6 rounded-2xl bg-[#0a1a2f] p-8 text-white sm:p-10 md:flex-row md:items-center md:justify-between">
+          <div><h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">What does your business need to work better?</h2><p className="mt-3 max-w-xl text-base leading-7 text-slate-300">Share the problem you want to solve and the project you have in mind.</p></div>
+          <Link href="/get-quote" className={buttonStyles({ variant: "secondary", size: "lg", className: "shrink-0 self-start md:self-center" })}>Discuss Your Project <ArrowRight size={16} aria-hidden="true" /></Link>
+        </div>
+      </section>
+    </>
+  );
+}
