@@ -3,10 +3,12 @@ import { insightArticles } from "@/lib/insights-data";
 import { serviceDetails } from "@/lib/service-details-data";
 import { listWorkProjects } from "@/lib/work/repository";
 import { listTemplates } from "@/lib/templates/repository";
+import { SITE_URL } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com";
-  const [templates, projects] = await Promise.all([listTemplates(), listWorkProjects()]);
+  const [templatesResult, projectsResult] = await Promise.allSettled([listTemplates(), listWorkProjects()]);
+  const templates = templatesResult.status === "fulfilled" ? templatesResult.value : [];
+  const projects = projectsResult.status === "fulfilled" ? projectsResult.value : [];
   const routes = [
     "",
     "/services",
@@ -28,30 +30,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...routes.map(url => ({
-      url: `${base}${url}`,
-      lastModified: new Date(),
+      url: `${SITE_URL}${url}`,
       changeFrequency: url === "" ? "weekly" as const : "monthly" as const,
       priority: url === "" ? 1 : (["/services", "/templates", "/pricing", "/products", "/request"].includes(url) ? 0.9 : 0.7),
     })),
     ...serviceDetails.map(service => ({
-      url: `${base}/services/${service.slug}`,
-      lastModified: new Date(),
+      url: `${SITE_URL}/services/${service.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     ...templates.map(template => ({
-      url: `${base}/templates/${template.slug}`,
+      url: `${SITE_URL}/templates/${template.slug}`,
       lastModified: new Date(template.created_at),
       changeFrequency: "monthly" as const,
       priority: template.featured ? 0.8 : 0.7,
     })),
     ...projects.map(project => ({
-      url: `${base}/work/${project.slug}`,
+      url: `${SITE_URL}/work/${project.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     ...insightArticles.map(article => ({
-      url: `${base}/market-insights/${article.slug}`,
+      url: `${SITE_URL}/market-insights/${article.slug}`,
       lastModified: new Date(article.date),
       changeFrequency: "monthly" as const,
       priority: 0.7,

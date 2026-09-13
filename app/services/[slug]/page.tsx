@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ServiceDetailPage } from "@/components/services/service-detail-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getServiceDetail, serviceDetails } from "@/lib/service-details-data";
 import { getDigitalService } from "@/lib/services-data";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -16,8 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const detail = getServiceDetail(slug);
 
   return service && detail
-    ? { title: service.name, description: detail.introduction, alternates: { canonical: `/services/${detail.slug}` } }
-    : { title: "Service not found" };
+    ? pageMetadata({ title: service.name, socialTitle: `${service.name} | TradeBridge Digital`, description: detail.introduction, path: `/services/${detail.slug}` })
+    : { title: "Service Not Found", robots: { index: false, follow: false } };
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,16 +29,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   if (!service || !detail) notFound();
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com";
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.name,
     description: detail.introduction,
-    url: `${baseUrl}/services/${detail.slug}`,
-    provider: { "@type": "Organization", name: "TradeBridge Digital", url: baseUrl },
-    areaServed: "Worldwide",
+    url: `${SITE_URL}/services/${detail.slug}`,
+    provider: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL },
   };
 
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} /><ServiceDetailPage service={service} detail={detail} /></>;
+  return <><JsonLd data={schema} /><ServiceDetailPage service={service} detail={detail} /></>;
 }

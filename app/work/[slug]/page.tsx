@@ -5,19 +5,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { buttonStyles } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getWorkProjectBySlug } from "@/lib/work/repository";
+import { SITE_URL, absoluteUrl, pageMetadata } from "@/lib/seo";
 
 type CaseStudyPageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
   const project = await getWorkProjectBySlug((await params).slug);
   if (!project) return { title: "Project Not Found", robots: { index: false, follow: false } };
-  return {
-    title: `${project.name} | Case Study`,
-    description: project.summary,
-    alternates: { canonical: `/work/${project.slug}` },
-    openGraph: { title: `${project.name} | Case Study`, description: project.summary, url: `/work/${project.slug}` },
-  };
+  return pageMetadata({ title: `${project.name} Case Study`, socialTitle: `${project.name} — ${project.project_type}`, description: project.summary, path: `/work/${project.slug}` });
 }
 
 function StudySection({ title, children }: { title: string; children: ReactNode }) {
@@ -36,8 +33,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   if (!project) notFound();
   const study = project.case_study;
   const isConcept = project.project_type === "Concept Project";
+  const schema = { "@context": "https://schema.org", "@type": "Article", headline: `${project.name} Case Study`, description: project.summary, url: `${SITE_URL}/work/${project.slug}`, articleSection: project.category, image: project.screenshots.map(absoluteUrl), author: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL }, publisher: { "@id": `${SITE_URL}/#organization` } };
 
   return <>
+    <JsonLd data={schema} />
     <header className="bg-[#07152b] py-14 text-white sm:py-20">
       <div className="container-site max-w-5xl">
         <Link href="/work" className="inline-flex items-center gap-2 text-sm font-bold text-blue-200 hover:text-white"><ArrowLeft size={16} aria-hidden="true" /> All Work</Link>

@@ -2,20 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Bot, BriefcaseBusiness, LayoutDashboard, MonitorSmartphone, Workflow } from "lucide-react";
 import { ProjectCard } from "@/components/work/project-card";
+import { JsonLd } from "@/components/seo/json-ld";
 import { buttonStyles } from "@/components/ui/button";
 import { listWorkProjects } from "@/lib/work/repository";
 import type { WorkProjectCategory } from "@/lib/work/types";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Work & Internal Projects",
-  description: "Explore TradeBridge Digital website builds, business-system demos, automation concepts and AI project concepts—clearly labelled by project status.",
-  alternates: { canonical: "/work" },
-  openGraph: {
-    title: "Work & Internal Projects | TradeBridge Digital",
-    description: "Actual internal builds and clearly labelled demo and concept projects from TradeBridge Digital.",
-    url: "/work",
-  },
-};
+export const metadata: Metadata = pageMetadata({ title: "Work, Internal Builds & Case Studies", description: "Explore TradeBridge Digital internal builds and clearly labelled website, business system, automation and AI project concepts.", path: "/work" });
 
 const categories: ReadonlyArray<{ name: WorkProjectCategory; description: string; icon: typeof MonitorSmartphone }> = [
   { name: "Websites", description: "Public-facing websites and content systems.", icon: MonitorSmartphone },
@@ -31,13 +24,14 @@ export default async function WorkPage() {
     "@type": "CollectionPage",
     name: "TradeBridge Digital Work",
     description: "Internal builds, demo projects and concept projects by TradeBridge Digital.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"}/work`,
+    url: `${SITE_URL}/work`,
     numberOfItems: projects.length,
+    mainEntity: { "@type": "ItemList", itemListElement: projects.map((project, index) => ({ "@type": "ListItem", position: index + 1, name: project.name, url: `${SITE_URL}/work/${project.slug}` })) },
   };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <JsonLd data={schema} />
 
       <section className="relative isolate overflow-hidden bg-[#07152b] py-20 text-white sm:py-24 lg:py-28">
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_25%,rgba(22,93,255,.26),transparent_32%),radial-gradient(circle_at_88%_70%,rgba(213,174,77,.12),transparent_28%)]" />

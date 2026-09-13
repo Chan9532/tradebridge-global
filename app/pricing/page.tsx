@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { ArrowRight, CircleDollarSign } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { PricingCard } from "@/components/pricing/pricing-card";
 import { buttonStyles } from "@/components/ui/button";
 import { formatPrice, pricingConfig } from "@/lib/pricing-data";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Pricing",
-  description: "Clear starting prices for websites, business systems, automation, AI integration and ongoing maintenance from TradeBridge Digital.",
-};
+export const metadata: Metadata = pageMetadata({ title: "Website & Business System Pricing", description: "Review TradeBridge Digital starting prices for websites, business systems, automation, AI integration and ongoing support.", path: "/pricing" });
 
 const customQuoteHref = "mailto:info@tradebridge-global.com?subject=TradeBridge%20Digital%20Custom%20Quote";
 
@@ -18,11 +17,13 @@ export default function PricingPage() {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
     name: "TradeBridge Digital Pricing",
-    itemListElement: pricingConfig.packages.map(plan => ({ "@type": "Offer", name: plan.name, price: plan.price, priceCurrency: pricingConfig.currency })),
+    url: `${SITE_URL}/pricing`,
+    provider: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL },
+    itemListElement: pricingConfig.packages.map(plan => ({ "@type": "Offer", name: plan.name, price: plan.price, priceCurrency: pricingConfig.currency, url: `${SITE_URL}/pricing` })),
   };
 
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+    <JsonLd data={schema} />
     <PageHero eyebrow="Simple pricing" title="Clear starting points for your next build" description="Choose the level closest to your needs. We confirm the exact scope and quote before any project begins." />
 
     <section className="section-pad bg-[#f7f9fc]">

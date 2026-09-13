@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { ArrowRight, Bot, Braces, CalendarCheck2, ContactRound, LayoutDashboard, MonitorSmartphone, PanelsTopLeft, Workflow } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ServiceCard } from "@/components/services/service-card";
 import { buttonStyles } from "@/components/ui/button";
 import { getServiceDetail } from "@/lib/service-details-data";
 import { digitalServices, serviceDetailPath, type DigitalServiceId } from "@/lib/services-data";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description: "Explore website development, CRM, business applications, automation and AI services from TradeBridge Digital.",
-};
+export const metadata: Metadata = pageMetadata({ title: "Digital Services", socialTitle: "Website, CRM, Automation & AI Services | TradeBridge Digital", description: "Practical website development, CRM, business application, automation and AI integration services from TradeBridge Digital.", path: "/services" });
 
 const serviceIcons = {
   "business-websites": MonitorSmartphone,
@@ -29,11 +28,11 @@ export default function ServicesPage() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "TradeBridge Digital Services",
-    itemListElement: digitalServices.map((service, index) => ({ "@type": "ListItem", position: index + 1, name: service.name })),
+    itemListElement: digitalServices.map((service, index) => ({ "@type": "ListItem", position: index + 1, name: service.name, url: `${SITE_URL}${serviceDetailPath(service)}` })),
   };
 
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+    <JsonLd data={schema} />
     <PageHero eyebrow="What we build" title="Digital services designed to solve useful business problems" description="Choose a focused website, an internal business system or a connected solution that brings both together." />
 
     <section className="section-pad bg-[#f7f9fc]" aria-label="TradeBridge Digital services">

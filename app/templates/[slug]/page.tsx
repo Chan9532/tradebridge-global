@@ -4,9 +4,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, ExternalLink, FileText, Images, Layers3, MonitorSmartphone, Palette } from "lucide-react";
 import { TemplateCard } from "@/components/templates/template-card";
+import { JsonLd } from "@/components/seo/json-ld";
 import { buttonStyles } from "@/components/ui/button";
 import { formatPrice } from "@/lib/pricing-data";
 import { getTemplateBySlug, listTemplates } from "@/lib/templates/repository";
+import { SITE_URL, absoluteUrl, pageMetadata } from "@/lib/seo";
 
 type TemplateDetailProps = { params: Promise<{ slug: string }> };
 
@@ -15,17 +17,12 @@ export async function generateMetadata({ params }: TemplateDetailProps): Promise
   const template = await getTemplateBySlug(slug);
   if (!template) return { title: "Template Not Found", robots: { index: false, follow: false } };
 
-  return {
+  return pageMetadata({
     title: `${template.name} Website Template`,
+    socialTitle: `${template.name} — ${template.industry} Website Template`,
     description: template.short_description,
-    alternates: { canonical: `/templates/${template.slug}` },
-    openGraph: {
-      title: `${template.name} Website Template | TradeBridge Digital`,
-      description: template.short_description,
-      url: `/templates/${template.slug}`,
-      images: [{ url: template.thumbnail, width: 1200, height: 750, alt: `${template.name} website template preview` }],
-    },
-  };
+    path: `/templates/${template.slug}`,
+  });
 }
 
 export default async function TemplateDetailPage({ params }: TemplateDetailProps) {
@@ -44,23 +41,22 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
         "@type": "Service",
         name: `${template.name} Website Template`,
         description: template.short_description,
-        image: [template.thumbnail, ...template.screenshots],
+        image: [template.thumbnail, ...template.screenshots].map(absoluteUrl),
         serviceType: `Custom ${template.industry} website based on the ${template.name} design`,
-        areaServed: "Worldwide",
-        provider: { "@type": "Organization", name: "TradeBridge Digital" },
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"}/templates/${template.slug}`,
+        provider: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL },
+        url: `${SITE_URL}/templates/${template.slug}`,
       }
     : {
         "@context": "https://schema.org",
         "@type": "WebPage",
         name: `${template.name} Website Template — Coming Soon`,
         description: template.short_description,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"}/templates/${template.slug}`,
+        url: `${SITE_URL}/templates/${template.slug}`,
       };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <JsonLd data={schema} />
 
       <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
         <div className="container-site">
