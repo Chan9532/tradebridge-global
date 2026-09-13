@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 import { Layers3, SearchCheck, Sparkles } from "lucide-react";
 import { TemplateCatalog } from "@/components/templates/template-catalog";
+import { JsonLd } from "@/components/seo/json-ld";
 import { listTemplates } from "@/lib/templates/repository";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Website Templates",
-  description: "Browse original TradeBridge Digital website concepts for restaurants, construction, cleaning, real estate, dental, agencies and service businesses.",
-  openGraph: {
-    title: "Website Templates | TradeBridge Digital",
-    description: "Explore clear, modern starting points for your next business website.",
-    url: "/templates",
-  },
-};
+export const metadata: Metadata = pageMetadata({ title: "Website Templates", description: "Browse adaptable TradeBridge Digital website concepts for agencies, consultants, local services, restaurants, construction and other businesses.", path: "/templates" });
 
 export default async function TemplatesPage() {
   const templates = await listTemplates();
@@ -20,13 +14,14 @@ export default async function TemplatesPage() {
     "@type": "CollectionPage",
     name: "TradeBridge Digital Website Templates",
     description: "Adaptable website template concepts for startups and growing businesses.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com"}/templates`,
+    url: `${SITE_URL}/templates`,
     numberOfItems: templates.length,
+    mainEntity: { "@type": "ItemList", itemListElement: templates.map((template, index) => ({ "@type": "ListItem", position: index + 1, name: template.name, url: `${SITE_URL}/templates/${template.slug}` })) },
   };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <JsonLd data={schema} />
 
       <section className="relative isolate overflow-hidden bg-[#07152b] py-20 text-white sm:py-24 lg:py-28">
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_25%,rgba(22,93,255,.26),transparent_32%),radial-gradient(circle_at_88%_70%,rgba(213,174,77,.12),transparent_28%)]" />

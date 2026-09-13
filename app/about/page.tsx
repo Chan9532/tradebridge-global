@@ -2,18 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { buttonStyles } from "@/components/ui/button";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "TradeBridge Digital is an independent digital studio founded by Chanchal Dey, helping businesses build practical websites, systems and automations.",
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: "About TradeBridge Digital",
-    description: "An independent digital studio focused on practical systems that solve real business problems.",
-    url: "/about",
-  },
-};
+export const metadata: Metadata = pageMetadata({ title: "About", socialTitle: "About TradeBridge Digital", description: "TradeBridge Digital is an independent studio founded by Chanchal Dey, building practical websites, business systems and automations.", path: "/about" });
 
 const strengths = [
   "Business understanding",
@@ -27,8 +20,10 @@ const strengths = [
 const tools = ["Next.js", "React", "Supabase", "APIs", "n8n", "AI integration"];
 
 export default function AboutPage() {
+  const schema = { "@context": "https://schema.org", "@type": "AboutPage", name: "About TradeBridge Digital", url: `${SITE_URL}/about`, mainEntity: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL, founder: { "@type": "Person", name: "Chanchal Dey", jobTitle: "Web Developer & Business Systems Builder" } } };
   return (
     <>
+      <JsonLd data={schema} />
       <PageHero
         eyebrow="About TradeBridge Digital"
         title="An independent digital studio."

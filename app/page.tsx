@@ -17,16 +17,15 @@ import {
   Workflow,
 } from "lucide-react";
 import { BrowserVisual } from "@/components/home/browser-visual";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { buttonStyles } from "@/components/ui/button";
 import { coreServices, featuredWork, processSteps, type ServiceId } from "@/lib/digital-home-data";
 import { formatPrice, pricingConfig as pricing } from "@/lib/pricing-data";
 import { listFeaturedTemplates } from "@/lib/templates/repository";
+import { DEFAULT_DESCRIPTION, SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Websites & Business Systems That Help You Grow",
-  description: "Modern websites, CRM systems, automations and AI-powered business solutions for startups and growing businesses.",
-};
+export const metadata: Metadata = pageMetadata({ title: "Websites, Business Systems & Automation", socialTitle: "TradeBridge Digital | Practical Websites, Systems & Automation", description: DEFAULT_DESCRIPTION, path: "/" });
 
 const quoteHref = "mailto:info@tradebridge-global.com?subject=TradeBridge%20Digital%20Project%20Quote";
 const serviceIcons = { websites: MonitorSmartphone, systems: LayoutDashboard, automation: Workflow, ai: Bot } satisfies Record<ServiceId, typeof Globe2>;
@@ -36,17 +35,14 @@ export default async function Home() {
   const featuredTemplates = await listFeaturedTemplates(6);
   const schema = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "TradeBridge Digital",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://tradebridge-global.com",
-    email: "info@tradebridge-global.com",
-    description: "Websites, business systems, automation and AI-powered solutions for growing businesses.",
-    areaServed: "Worldwide",
-    serviceType: ["Website development", "Business systems", "Workflow automation", "AI integration"],
+    "@graph": [
+      { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL, email: "info@tradebridge-global.com", description: DEFAULT_DESCRIPTION, founder: { "@type": "Person", name: "Chanchal Dey", jobTitle: "Web Developer & Business Systems Builder" } },
+      { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "TradeBridge Digital", url: SITE_URL, description: DEFAULT_DESCRIPTION, publisher: { "@id": `${SITE_URL}/#organization` } },
+    ],
   };
 
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+    <JsonLd data={schema} />
 
     <section className="relative isolate overflow-hidden bg-[#07152b] text-white">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_20%,rgba(22,93,255,.25),transparent_32%),radial-gradient(circle_at_84%_62%,rgba(64,148,255,.16),transparent_35%)]" />

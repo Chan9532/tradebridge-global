@@ -3,18 +3,17 @@ import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
 import { getLeadFormConfig } from "@/lib/inquiries/config";
 import { PageHero } from "@/components/shared/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ContactInquiryForm } from "@/components/forms/contact-inquiry-form";
 import { buttonStyles } from "@/components/ui/button";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contact TradeBridge Digital about a website, business system, automation or AI project.",
-  alternates: { canonical: "/contact" },
-  openGraph: { title: "Contact TradeBridge Digital", description: "Discuss a practical digital solution for your business.", url: "/contact" },
-};
+export const metadata: Metadata = pageMetadata({ title: "Contact", socialTitle: "Contact TradeBridge Digital", description: "Contact TradeBridge Digital to discuss a practical website, business system, automation or AI integration project.", path: "/contact" });
 
 export default function ContactPage() {
+  const schema = { "@context": "https://schema.org", "@type": "ContactPage", name: "Contact TradeBridge Digital", url: `${SITE_URL}/contact`, mainEntity: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "TradeBridge Digital", url: SITE_URL, email: "info@tradebridge-global.com", contactPoint: { "@type": "ContactPoint", email: "info@tradebridge-global.com", contactType: "project enquiries" } } };
   return <>
+    <JsonLd data={schema} />
     <PageHero eyebrow="Contact TradeBridge Digital" title="Let's discuss what you need." description="Have a question or a business problem to solve? Tell us about your website, system, automation or AI project." />
     <section className="container-site grid gap-10 py-14 sm:py-20 lg:grid-cols-[.8fr_1.2fr]">
       <div>
