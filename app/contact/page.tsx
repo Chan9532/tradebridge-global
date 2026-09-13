@@ -1,6 +1,32 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Mail } from "lucide-react";
+import { getLeadFormConfig } from "@/lib/inquiries/config";
 import { PageHero } from "@/components/shared/page-hero";
-import { ContactForm } from "@/components/forms/contact-form";
-export const metadata:Metadata={title:"Contact",description:"Contact TradeBridge Global about sourcing, supplier registration or international trade matching."};
-export default function ContactPage(){return <><PageHero eyebrow="Talk to our team" title="Start a sourcing conversation" description="Send a message about a product, buyer requirement, supplier capability or trade partnership."/><section className="container-site section-pad grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><h2 className="text-2xl font-extrabold text-[#071a33]">Contact details</h2><div className="mt-6 space-y-4">{[[Mail,"Email","info@tradebridge-global.com"],[MessageCircle,"WhatsApp","+91 (0)00 0000 0000"],[MapPin,"Office","Mumbai, India — full address provided by appointment"],[Clock,"Business hours","Monday–Friday, 09:00–18:00 IST"]].map(([Icon,label,text])=><div key={label as string} className="flex gap-4 rounded-xl border border-slate-200 p-4"><span className="grid size-10 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Icon size={19}/></span><div><strong className="block text-sm text-[#071a33]">{label as string}</strong><span className="mt-1 block text-sm leading-6 text-slate-600">{text as string}</span></div></div>)}</div><a href="https://wa.me/910000000000" target="_blank" rel="noreferrer" className="mt-6 inline-flex h-12 items-center gap-2 rounded-lg bg-emerald-600 px-5 text-sm font-bold text-white"><MessageCircle size={18}/>Message on WhatsApp</a></div><div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft md:p-8"><ContactForm/></div></section></>}
+import { ContactInquiryForm } from "@/components/forms/contact-inquiry-form";
+import { buttonStyles } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Contact TradeBridge Digital about a website, business system, automation or AI project.",
+  alternates: { canonical: "/contact" },
+  openGraph: { title: "Contact TradeBridge Digital", description: "Discuss a practical digital solution for your business.", url: "/contact" },
+};
+
+export default function ContactPage() {
+  return <>
+    <PageHero eyebrow="Contact TradeBridge Digital" title="Let's discuss what you need." description="Have a question or a business problem to solve? Tell us about your website, system, automation or AI project." />
+    <section className="container-site grid gap-10 py-14 sm:py-20 lg:grid-cols-[.8fr_1.2fr]">
+      <div>
+        <h2 className="text-2xl font-extrabold text-[#0a1a2f]">Get in touch</h2>
+        <a href="mailto:info@tradebridge-global.com" className="mt-5 flex items-start gap-3 text-base font-semibold text-blue-700 underline underline-offset-4"><Mail size={20} aria-hidden="true" className="mt-1 shrink-0" /><span className="break-all">info@tradebridge-global.com</span></a>
+        <div className="mt-8 rounded-2xl bg-slate-50 p-6">
+          <h3 className="text-xl font-extrabold text-[#0a1a2f]">Have a project in mind?</h3>
+          <p className="mt-3 text-base leading-7 text-slate-600">Prepare a quote request with your requirements, budget and timeline. You can include a design from our template library.</p>
+          <Link href="/get-quote" className={buttonStyles({ className: "mt-5" })}>Get a Quote <ArrowRight size={16} aria-hidden="true" /></Link>
+        </div>
+      </div>
+      <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"><ContactInquiryForm delivery={getLeadFormConfig()} /></div>
+    </section>
+  </>;
+}
